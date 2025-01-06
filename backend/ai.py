@@ -50,8 +50,14 @@ features_future_measurable = ["Overall Food Insecurity Rate", "# of Food Insecur
 
 future_prediction = modeling.predict(future[features_future_measurable])
 
-print(future_prediction)
-
 future["Estimated Number of People Food Insecure"] = future_prediction
+
 ranked_counties = future.sort_values(by='Estimated Number of People Food Insecure', ascending=False) 
-print(ranked_counties[['County, State', 'Estimated Number of People Food Insecure']])
+
+(ranked_counties[['County, State', 'Estimated Number of People Food Insecure']]).to_excel("ModelEstimatedOutputData4Year.xlsx", index=False)
+
+df3 = pd.DataFrame(pd.read_excel("ModelEstimatedOutputData4Year.xlsx", "Sheet1"))
+
+df3_result = df3.groupby("County, State")['Estimated Number of People Food Insecure'].mean().reset_index() #average of the four years of predicted data per county
+
+df3_result.to_excel("AverageEstimatedOutputData.xlsx", index=False)
